@@ -1,0 +1,63 @@
+{% extends "base.html" %} 
+{% block encabezado %} Gestion asignacion {% endblock %}
+{% block encabezadofor %} Proyecto asignado {% endblock %}
+{% block contenido %}
+<div class="col-md-12">
+
+    <div class="col-md-12">
+      <a
+        class="btn btn-dark btn-sm"
+        style="float: right"
+        href="{% url 'proyLista' %}"
+        ><i class="fas fa-arrow-left fa- sm"></i> Volver</a
+      >
+    </div>
+  </div>
+</div>
+<br />
+<div class="card shadow mb-4">
+  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+    <div class="table-responsive">
+      <table  class="table table-striped"id="dataTable" width="100%"  cellspacing="0">
+        <thead style="text-align: center;">
+          <tr>
+            <th>Proyecto</th>
+            <th>Personal</th>
+            <th>Cargo</th>
+            <th>Fecha inicio</th>
+            <th>Fecha fin</th>
+            <th>Pdf/Imagen</th>
+
+          </tr>
+        </thead>
+
+        <tbody style="text-align: center;">
+            {% for asignacion in asignaciones %}
+              {% if asignacion.proyecto_asig_id == proyecto.id_proy %}
+                <tr>
+                  <td>{{asignacion.proyecto_asig.nombre_proy}}</td>
+                  <td>{{asignacion.personal_asig.persona_perl.nombre_per}} {{asignacion.personal_asig.persona_perl.apellidoP_per}}</td>
+                  <td>{{asignacion.personal_asig.cargo_perl.nombre_carg}}</td>
+                  <td>{{asignacion.fechaIni_asig}}</td>
+                  <td>{{asignacion.fechaFin_asig}}</td>
+                  <td>
+                    {% if asignacion.imagen_asig != "S/N" and asignacion.imagen_asig != "" %}
+                      <a href="{{ asignacion.imagen_asig.url }}" target="_blank">
+                        <img src="/static/img/pdf.png" height="50">
+                      </a>
+
+                    {% else %}
+                    <img src="/static/img/pregunta.jpg" height="50">
+                    {% endif %}
+                               
+                  <td>
+                <tr>
+              {% endif %}
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %} 
+{% block encabezado %}Gestion reportes{% endblock %}
+{% block encabezadofor %} Lista de personal Activo en la empresa {% endblock %}
+{% block js %}
+{% endblock %} {% block contenido %}
+<div class="col-md-12">
+  <div class="row">
+    <div class="col-md-12">
+      <a
+      class="btn btn-danger btn-sm"
+      style="float: right"
+      href="{% url 'repersonal_pdf2' %}" target="_blank"
+      ><i class="fas fa-file-pdf">-PDF</i></a
+      >
+    </div>
+  </div>
+</div>
+<br>
+<div class="card shadow mb-4">
+  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+    <div class="table-responsive">
+      <table
+        class="table table-striped"
+        id="dataTable"
+        width="100%"
+        cellspacing="0"
+      >
+        <thead style="text-align: left;">
+          <tr>
+            <th>Nombre y Apellidos</th>
+            <th>Nº Doc</th>
+            <th>Direccion</th>
+            <th>Telf.</th>
+            <th>Area</th>
+            <th>Cargo</th>
+            <th>Fecha de Ing.</th>
+          </tr>
+        </thead>
+
+        <tbody style="text-align: left;">
+          {% for personal in personales %}
+            
+            <tr>
+              <td>{{personal.persona_perl.nombre_per}} {{personal.persona_perl.apellidoP_per}}</td>
+              <td>{{personal.persona_perl.numDoc_per}}</td>
+              <td>{{personal.persona_perl.direccion_per}}</td>
+              <td>{{personal.persona_perl.telf_per}}</td>
+              <td>{{personal.area_perl.nombre_are}}</td>
+              <td>{{personal.cargo_perl.nombre_carg}}</td>
+              <td>{{personal.fechIngre_perl}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+        {% if proyectos.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="Primera">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ proyectos.previous_page_number }}" aria-label="Anterior">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {% endif %}
+
+        <li class="page-item disabled">
+            <span class="page-link">Página {{ proyectos.number }} de {{ proyectos.paginator.num_pages }}</span>
+        </li>
+
+        {% if proyectos.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ proyectos.next_page_number }}" aria-label="Siguiente">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ proyectos.paginator.num_pages }}" aria-label="Última">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+  </nav>
+{% endblock %}
+

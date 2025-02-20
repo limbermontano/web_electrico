@@ -1,0 +1,149 @@
+{% extends "base.html" %} 
+{% block encabezado %}Gestion reportes{% endblock %}
+{% block encabezadofor %} Lista proyectos enviados {% endblock %}
+{% block js %}
+
+{% endblock %} {% block contenido %}
+<div class="col-md-12">
+  <div class="row"id="grupo__nota">
+    <div class="col-md-6">
+      <form action="#" id="formulario6" method="GET">
+        <div class="btn-group">
+          <input type="text" name="buscar" class="form-control" id="nota"/>
+          <p class="formulario__input-error">""</p>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="fas fa-search fa-sm"></i>
+          </button>
+          <input type="date" class="form-control" name="fecha_inicio" value="{{ request.GET.fecha_inicio }}">
+          <input type="date" class="form-control" name="fecha_fin" value="{{ request.GET.fecha_fin }}">
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6">
+
+      {% comment %} <a
+      class="btn btn-success btn-sm"
+      style="float: right"
+      href="{% url 'repListapdf' %}" target="_blank"
+      ><i class="fas fa-plus fa-sm"></i> PDF1</a
+      > {% endcomment %}
+      <!-- <a
+      class="btn btn-danger btn-sm"
+      style="float: right"
+      href="{% url 'repenvio_pdf2' %}" target="_blank" disabled="true"
+      ><i class="fas fa-file-pdf"></i> PDF</a
+      > -->
+    </div>
+  </div>
+</div>
+<br>
+<div class="card shadow mb-4">
+  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+    <div class="table-responsive">
+      <table
+        class="table table-striped"
+        id="dataTable"
+        width="100%"
+        cellspacing="0"
+      >
+        <thead style="text-align: left;">
+          <tr>
+            <th>Proyecto</th>
+            <th>Ubicacion</th>
+            <th>Fiscal</th>
+            <th>Fecha de envio</th>
+            <th>Etapa</th>
+            <th>Observaciones</th>
+            <th>Monto M.O</th>
+          </tr>
+        </thead>
+
+        <tbody style="text-align: left;">
+          {% for envio in envios %}
+            
+            <tr>
+              <td>{{envio.proyecto_env.nombre_proy}}</td>
+              <td>{{envio.proyecto_env.ubicacion_proy}}</td>
+              <td>{{envio.proyecto_env.fiscal_proy.nombre_fis}} {{envio.proyecto_env.fiscal_proy.apellidoP_fis}}</td>
+              <td>{{envio.fechaEnv_env}}</td>
+              <td>Aprobacion</td>
+              <td>{{envio.nota_env }}</td>
+              <td class="monto">{{envio.monto_env|default:"0"}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="row" style="float: right">
+        <div class="col-md-12">
+          <label for="totalMonto">Total Monto M.O:</label>
+          <input type="text" id="totalMonto" readonly style="float: right">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    $(document).ready(function () {
+    let total = 0;
+
+    $(".monto").each(function () {
+        let montoTexto = $(this).text().trim();
+
+        // Convertir "1,023.50" (inglés) a "1023.50" (para calcular correctamente)
+        if (montoTexto.includes(",")) {
+          montoTexto = montoTexto.replace(/\./g, "").replace(",", ".");
+        }
+
+        let monto = parseFloat(montoTexto) || 0; // Convertir a número
+        total += monto;
+    });
+
+    // Convertir el total al formato español (puntos para miles, coma para decimales)
+    let totalFormateado = total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(".", ",");
+
+    $("#totalMonto").val(totalFormateado);
+  });
+
+
+  </script>
+  
+</div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if proyectos.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="Primera">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ proyectos.previous_page_number }}" aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+    
+            <li class="page-item disabled">
+                <span class="page-link">Página {{ proyectos.number }} de {{ proyectos.paginator.num_pages }}</span>
+            </li>
+    
+            {% if proyectos.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ proyectos.next_page_number }}" aria-label="Siguiente">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ proyectos.paginator.num_pages }}" aria-label="Última">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+ 
+</div>
+{% endblock %}
+<img src="image source" class="img-fluid rounded-top" alt="">
